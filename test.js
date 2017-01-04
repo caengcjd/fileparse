@@ -61,8 +61,93 @@ app.get('/', function (req, res) {
 
 //upload files操作
 
+app.post('/parse', function (req, res, next) {
 
-app.post('/parse', upload.single("file"), function (req, res, next) {
+  var global_file=req.body.file;
+  if(!req.body.file){
+	res.send({result:0,data:"文件请求失败!"});return;
+  }else if(!req.body.column){
+	res.send({result:0,data:"column验证失败!"});return;
+  }else if(!req.body.type){
+	res.send({result:0,data:"文档类型验证失败!"});return;
+  }
+
+  var options = {  
+    hostname: '127.0.0.1',  
+    port: 8000,  
+    path: "/"+req.body.file,  
+    method: 'GET'  
+};  
+  
+var req = http.request(options, function (res) {  
+    console.log('STATUS: ' + res.statusCode);  
+    console.log('HEADERS: ' + JSON.stringify(res.headers));  
+    res.setEncoding('utf8'); 
+	var html="";
+    res.on('data', function (chunk) {  
+        console.log('BODY: ' + chunk); 
+		htm+=chunk;
+    }); 
+	res.on('end', function () { 
+		console.log("end"+html);
+		fs.writeFile(currentPath+uploadFolder+global_file,html,function (error,data){
+			if(error) throw error ;
+			//发送c#进行解析文件
+			var data={  
+			doc_url:currentPath+uploadFolder+global_file,
+			column:req.body.column,
+			type:req.body.type,
+			ismerge:req.body.ismerge
+		  };  
+		  
+			var content=querystring.stringify(data);  
+			//console.log(data.doc_url);
+			var options={  
+				hostname:global_hostname,
+				port:global_port,  
+				path:'/webservice2.asmx/resolve?'+content,  
+				method:'GET'  
+			}  
+
+			//创建请求  
+		var req=http.request(options,function(res_resolve){  
+			//console.log('STATUS:'+res.statusCode);  
+			//console.log('HEADERS:'+JSON.stringify(res.headers));  
+			res_resolve.setEncoding('utf-8'); 
+			html='';
+			res_resolve.on('data',function(chunk){  
+				console.log('数据片段分隔-----------------------\r\n');  
+				html+=chunk;
+			});  
+			res_resolve.on('end',function(){  
+				console.log('响应结束********');  
+				res.send({data:html,result:1});return;
+			});  
+		});  
+			req.on('error',function(err){  
+				//console.error(err);  
+				res.send({data:err.message,result:0});
+				return;
+			});  
+			req.end();//发送c# 解析
+					
+			
+		 });
+    }); 
+
+});  
+  
+req.on('error', function (e) {  
+    console.log('problem with request: ' + e.message);  
+});  
+  
+req.end();  
+
+});//post parse
+
+
+
+app.post('/parse_bak', upload.single("file"), function (req, res, next) {
 
   
   if(!req.file){
