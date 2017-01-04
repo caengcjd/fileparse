@@ -13,7 +13,7 @@ var currentPath=path.resolve(__dirname, '.');
 var global_hostname='127.0.0.1';
 var global_port=2614;
 
-//app.use(bodyParser.urlencoded({ extended: false })); 
+app.use(bodyParser.urlencoded({ extended: false })); 
 
 //var fileUpload = require('express-fileupload');
 var multer  = require('multer');
