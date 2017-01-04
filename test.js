@@ -121,7 +121,7 @@ app.post('/parse', function(req, res, next) {
           });
           res_resolve.on('end', function() {
             console.log('响应结束********');
-            res.send({data: html, result: 1});
+            res_resolve.send({data: html, result: 1});
             return;
           });
         });
