@@ -79,7 +79,7 @@ app.post('/parse', function(req, res, next) {
     method: 'GET'
   };
 
-  var req = http.request(options, function(res) {
+  var req1 = http.request(options, function(res) {
     console.log('STATUS: ' + res.statusCode);
     console.log('HEADERS: ' + JSON.stringify(res.headers));
     res.setEncoding('utf8');
