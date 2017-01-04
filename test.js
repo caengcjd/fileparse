@@ -75,7 +75,7 @@ app.post('/parse', function (req, res, next) {
   var options = {  
     hostname: '127.0.0.1',  
     port: 8000,  
-    path: "/"+req.body.file,  
+    path: req.body.file,  
     method: 'GET'  
 };  
   
