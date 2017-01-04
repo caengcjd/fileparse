@@ -86,7 +86,7 @@ var req = http.request(options, function (res) {
 	var html="";
     res.on('data', function (chunk) {  
         console.log('BODY: ' + chunk); 
-		htm+=chunk;
+		html+=chunk;
     }); 
 	res.on('end', function () { 
 		console.log("end"+html);
