@@ -1,3 +1,50 @@
+var express = require('express');
+var fs = require('fs');
+var app = express();
+
+var bodyParser = require("body-parser");
+
+var http=require('http');
+var querystring=require('querystring');
+var path = require('path');
+
+var currentPath=path.resolve(__dirname, '.');
+
+var global_hostname='127.0.0.1';
+var global_port=2614;
+
+app.use(bodyParser.urlencoded({ extended: false }));
+
+//var fileUpload = require('express-fileupload');
+var multer  = require('multer');
+var restler = require('restler');
+//var upload = multer({ dest: 'uploads/' });
+
+
+var createFolder = function(folder){
+  try{
+    fs.accessSync(folder);
+  }catch(e){
+    fs.mkdirSync(folder);
+  }
+};
+
+var uploadFolder = '/uploads/';
+
+createFolder(uploadFolder);
+
+// 通过 filename 属性定制
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, uploadFolder);    // 保存的路径，备注：需要自己创建
+  },
+  filename: function (req, file, cb) {
+    // 将保存文件名设置为 字段名 + 时间戳，比如 logo-1478521468943
+    var length=file.originalname.split('.').length;
+    cb(null, file.originalname.split('.')[0] + '-' + Date.now()+"."+file.originalname.split('.')[length-1]);
+    //cb(null, Date.now()+"."+file.originalname.split('.')[length-1]);
+  }
+});
 var upload = multer({storage: storage});
 
 //var upload = multer({ dest: 'uploads/' });
@@ -32,7 +79,7 @@ app.post('/parse', function(req, res, next) {
     method: 'GET'
   };
 
-  var req1 = http.request(options, function(res) {
+  var req = http.request(options, function(res) {
     console.log('STATUS: ' + res.statusCode);
     console.log('HEADERS: ' + JSON.stringify(res.headers));
     res.setEncoding('utf8');
@@ -63,7 +110,7 @@ app.post('/parse', function(req, res, next) {
         }
 
         //创建请求  
-        var req2 = http.request(options, function(res_resolve) {
+        var req = http.request(options, function(res_resolve) {
           //console.log('STATUS:'+res.statusCode);  
           //console.log('HEADERS:'+JSON.stringify(res.headers));  
           res_resolve.setEncoding('utf-8');
@@ -78,12 +125,12 @@ app.post('/parse', function(req, res, next) {
             return;
           });
         });
-        req2.on('error', function(err) {
+        req.on('error', function(err) {
           //console.error(err);  
           res.send({data: err.message, result: 0});
           return;
         });
-        req2.end();//发送c# 解析
+        req.end();//发送c# 解析
 
 
       });
