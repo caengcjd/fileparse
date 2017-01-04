@@ -29,7 +29,7 @@ var createFolder = function(folder){
     }  
 };
 
-var uploadFolder = './uploads/';
+var uploadFolder = '/uploads/';
 
 createFolder(uploadFolder);
 
