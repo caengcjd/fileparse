@@ -110,7 +110,7 @@ app.post('/parse', function(req, res, next) {
         }
 
         //创建请求  
-        var req = http.request(options, function(res_resolve) {
+        var req2 = http.request(options, function(res_resolve) {
           //console.log('STATUS:'+res.statusCode);  
           //console.log('HEADERS:'+JSON.stringify(res.headers));  
           res_resolve.setEncoding('utf-8');
@@ -125,12 +125,12 @@ app.post('/parse', function(req, res, next) {
             return;
           });
         });
-        req.on('error', function(err) {
+        req2.on('error', function(err) {
           //console.error(err);  
           res.send({data: err.message, result: 0});
           return;
         });
-        req.end();//发送c# 解析
+        req2.end();//发送c# 解析
 
 
       });
@@ -138,7 +138,7 @@ app.post('/parse', function(req, res, next) {
 
   });
 
-  req.on('error', function(e) {
+  req1.on('error', function(e) {
     console.log('problem with request: ' + e.message);
   });
 
