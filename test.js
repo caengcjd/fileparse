@@ -62,8 +62,8 @@ app.get('/', function (req, res) {
 //upload files操作
 
 app.post('/parse', function (req, res, next) {
-
-  var global_file=req.body.file;
+  var tmp = req.body.file.split('/');
+  var global_file = tmp.pop();
   if(!req.body.file){
 	res.send({result:0,data:"文件请求失败!"});return;
   }else if(!req.body.column){
