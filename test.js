@@ -142,7 +142,7 @@ app.post('/parse', function(req, res, next) {
     console.log('problem with request: ' + e.message);
   });
 
-  req.end();
+  req1.end();
 
 });//post parse
 
