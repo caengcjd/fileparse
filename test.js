@@ -89,7 +89,6 @@ app.post('/parse', function(req, res, next) {
       html += chunk;
     });
     res.on('end', function() {
-      console.log("end" + html);
       fs.writeFile(currentPath + uploadFolder + global_file, html, function(error, data) {
         if (error) throw error;
         //发送c#进行解析文件
