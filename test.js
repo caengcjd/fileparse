@@ -86,7 +86,6 @@ app.post('/parse', function(req, res, next) {
     res.setEncoding('utf8');
     var html = "";
     res.on('data', function(chunk) {
-      console.log('BODY: ' + chunk);
       html += chunk;
     });
     res.on('end', function() {
