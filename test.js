@@ -8,7 +8,7 @@ var http=require('http');
 var querystring=require('querystring');
 var path = require('path');
 
-var currentpath=path.resolve(__dirname, '.');
+var currentPath=path.resolve(__dirname, '.');
 
 var global_hostname='127.0.0.1';
 var global_port=2614;
