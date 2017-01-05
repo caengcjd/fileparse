@@ -57,8 +57,9 @@ app.get('/', function(req, res) {
 
 
 //upload files操作
-
+var g_res;
 app.post('/parse', function(req, res, next) {
+  g_res = res;
   var tmp = req.body.file.split('/');
   var global_file = tmp.pop();
   if (!req.body.file) {
@@ -111,7 +112,7 @@ app.post('/parse', function(req, res, next) {
         }
 
         //创建请求  
-        var req = http.request(options, function(res_resolve) {
+        var req2 = http.request(options, function(res_resolve) {
           //console.log('STATUS:'+res.statusCode);  
           //console.log('HEADERS:'+JSON.stringify(res.headers));  
           res_resolve.setEncoding('utf-8');
@@ -122,16 +123,16 @@ app.post('/parse', function(req, res, next) {
           });
           res_resolve.on('end', function() {
             console.log('响应结束********');
-            res.send({data: html, result: 1});
+            g_res.send({data: html, result: 1});
             return;
           });
         });
-        req.on('error', function(err) {
+        req2.on('error', function(err) {
           //console.error(err);  
           res.send({data: err.message, result: 0});
           return;
         });
-        req.end();//发送c# 解析
+        req2.end();//发送c# 解析
 
 
       });
@@ -139,11 +140,11 @@ app.post('/parse', function(req, res, next) {
 
   });
 
-  req.on('error', function(e) {
+  req1.on('error', function(e) {
     console.log('problem with request: ' + e.message);
   });
 
-  req.end();
+  req1.end();
 
 });//post parse
 
@@ -184,13 +185,13 @@ app.post('/parse_bak', upload.single("file"), function(req, res, next) {
     //console.log('HEADERS:'+JSON.stringify(res.headers));  
     res_resolve.setEncoding('utf-8');
     html = '';
-    res_resolve.on('data', function(chunk) {
+    g_res.on('data', function(chunk) {
       console.log('数据片段分隔-----------------------\r\n');
       html += chunk;
     });
     res_resolve.on('end', function() {
       console.log('响应结束********');
-      res.send({data: html, result: 1});
+      g_res.send({data: html, result: 1});
       return;
     });
   });
