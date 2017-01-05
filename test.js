@@ -2,7 +2,7 @@ var express = require('express');
 var fs = require('fs');
 var app = express();
 
-var bodyparser = require("body-parser");
+var bodyParser = require("body-parser");
 
 var http=require('http');
 var querystring=require('querystring');
