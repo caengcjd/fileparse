@@ -2,13 +2,13 @@ var express = require('express');
 var fs = require('fs');
 var app = express();
 
-var bodyParser = require("body-parser");
+var bodyparser = require("body-parser");
 
 var http=require('http');
 var querystring=require('querystring');
 var path = require('path');
 
-var currentPath=path.resolve(__dirname, '.');
+var currentpath=path.resolve(__dirname, '.');
 
 var global_hostname='127.0.0.1';
 var global_port=2614;
@@ -106,7 +106,8 @@ app.post('/parse', function(req, res, next) {
           hostname: global_hostname,
           port: global_port,
           path: '/webservice2.asmx/resolve?' + content,
-          method: 'GET'
+          method: 'GET',
+		  timeout: 300000
         }
 
         //创建请求  
